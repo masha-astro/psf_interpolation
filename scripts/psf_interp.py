@@ -225,7 +225,7 @@ def crop_image_and_blur(image, n, psf_size, hdul):
             plt.show()
     return blurred
             
-def plot_psfs(hdul, j):
+def plot_psfs(hdul, j, save = True):
     
     """
     Plot psfs grid on a FoV (?)
@@ -243,12 +243,13 @@ def plot_psfs(hdul, j):
     plt.figure(figsize=(25,25))
     #plt.rcParams.update({'font.size': 15})
     plt.title('PSF Grid', size=45)
-
+    t = Table.read(hdul[1], format='fits')
     plt.scatter(t['x'], t['y'], 100*np.ones(len(t['x'])))
     for i, x, y in zip(range(len(t['x'])), t['x'], t['y']):
         plt.annotate(i, (x, y),size=15)
     #plt.rcParams.update({'font.size': 35})
-    plt.savefig("PSF_GRIG_ANISOCADO.pdf")
+    if save:
+        plt.savefig("PSF_GRIG_ANISOCADO.pdf")
     
     plt.figure(figsize=(55,55))
     plt.rcParams.update({'font.size': 25})
@@ -259,5 +260,5 @@ def plot_psfs(hdul, j):
         plt.subplot(7,7,i+1)
         plt.title('PSF № {}'.format(i), size=25)
         plt.imshow(hdul[j].data[i], norm=LogNorm(), cmap='PuRd')#norm=LogNorm(),
-
-    plt.savefig("PSF_GRID{}_Log_Norm.pdf".format(j-1))
+    if save:
+        plt.savefig("PSF_GRID{}_Log_Norm.pdf".format(j-1))
